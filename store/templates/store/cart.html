@@ -1,0 +1,77 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div style="max-width: 1100px; margin: 0 auto;">
+    
+    <div style="display: flex; justify-content: space-between; align-items: flex-end; margin-bottom: 30px;">
+        <h1 style="color: white; font-weight: 800; margin: 0; font-size: 2.5rem;">Shopping Bag</h1>
+        
+        <a href="{% url 'home' %}" style="color: rgba(255,255,255,0.8); text-decoration: none; font-weight: 700; display: flex; align-items: center; gap: 8px; background: rgba(255,255,255,0.1); padding: 10px 20px; border-radius: 12px; backdrop-filter: blur(10px); transition: 0.3s; border: 1px solid rgba(255,255,255,0.1);" onmouseover="this.style.background='rgba(255,255,255,0.2)'" onmouseout="this.style.background='rgba(255,255,255,0.1)'">
+            Continue Shopping
+            <svg width="20" height="20" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M14 5l7 7m0 0l-7 7m7-7H3"></path></svg>
+        </a>
+    </div>
+
+    {% if items %}
+    <div style="background: white; border-radius: 30px; overflow: hidden; box-shadow: 0 25px 50px rgba(0,0,0,0.3);">
+        <table style="width: 100%; border-collapse: collapse; text-align: left;">
+            <thead style="background: #f8fafc; border-bottom: 1px solid #eee;">
+                <tr>
+                    <th style="padding: 25px; color: #64748b; font-weight: 700; text-transform: uppercase; font-size: 0.8rem;">Product</th>
+                    <th style="padding: 25px; color: #64748b; font-weight: 700; text-transform: uppercase; font-size: 0.8rem; text-align: center;">Quantity</th>
+                    <th style="padding: 25px; color: #64748b; font-weight: 700; text-transform: uppercase; font-size: 0.8rem; text-align: right;">Price</th>
+                    <th style="padding: 25px;"></th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for item in items %}
+                <tr style="border-bottom: 1px solid #f1f5f9;">
+                    <td style="padding: 25px; display: flex; align-items: center; gap: 20px;">
+                        <div style="width: 80px; height: 80px; background: #f1f5f9; border-radius: 15px; overflow: hidden;">
+                            {% if item.product.image %}
+                                <img src="{{ item.product.image.url }}" style="width:100%; height:100%; object-fit:cover;">
+                            {% else %}
+                                <img src="https://images.unsplash.com/photo-1523275335684-37898b6baf30?auto=format&fit=crop&q=80&w=200" style="width:100%; height:100%; object-fit:cover;">
+                            {% endif %}
+                        </div>
+                        <div>
+                            <h4 style="color: #0f172a; font-weight: 800; font-size: 1.1rem; margin-bottom: 5px;">{{ item.product.name }}</h4>
+                            <p style="color: #64748b; font-size: 0.85rem;">{{ item.product.category.name }}</p>
+                        </div>
+                    </td>
+                    <td style="padding: 25px;">
+                        <div style="display: flex; align-items: center; justify-content: center; gap: 15px;">
+                            <a href="{% url 'update_cart' item.id 'remove' %}" style="text-decoration: none; width: 35px; height: 35px; display: flex; align-items: center; justify-content: center; border-radius: 10px; background: #f1f5f9; color: #0f172a; font-weight: 800;">−</a>
+                            <span style="font-weight: 800; font-size: 1.1rem; color: #0f172a; width: 30px; text-align: center;">{{ item.quantity }}</span>
+                            <a href="{% url 'update_cart' item.id 'add' %}" style="text-decoration: none; width: 35px; height: 35px; display: flex; align-items: center; justify-content: center; border-radius: 10px; background: #f1f5f9; color: #0f172a; font-weight: 800;">+</a>
+                        </div>
+                    </td>
+                    <td style="padding: 25px; text-align: right;">
+                        <span style="font-weight: 900; color: var(--primary); font-size: 1.2rem;">₹{{ item.total_price }}</span>
+                    </td>
+                    <td style="padding: 25px; text-align: right;">
+                        <a href="{% url 'remove_item' item.id %}" onclick="return confirm('Remove this item from your bag?');" style="color: #ef4444; text-decoration: none; font-weight: 700; font-size: 0.85rem; padding: 8px 15px; border-radius: 10px; background: rgba(239, 68, 68, 0.1);">Remove</a>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+
+        <div style="padding: 40px; background: #f8fafc; display: flex; justify-content: space-between; align-items: center;">
+            <div>
+                <p style="color: #64748b; font-weight: 700; text-transform: uppercase; font-size: 0.75rem; letter-spacing: 1px;">Estimated Total</p>
+                <h2 style="font-size: 2.5rem; font-weight: 900; color: #0f172a;">₹{{ total }}</h2>
+            </div>
+            <a href="{% url 'checkout' %}" style="text-decoration: none; background: var(--primary); color: white; padding: 20px 60px; border-radius: 15px; font-weight: 800; font-size: 1.1rem; box-shadow: 0 10px 25px rgba(37, 99, 235, 0.3); transition: 0.3s;" onmouseover="this.style.transform='translateY(-2px)'" onmouseout="this.style.transform='translateY(0)'">Proceed to Checkout</a>
+        </div>
+    </div>
+    {% else %}
+    <div style="background: white; border-radius: 30px; padding: 100px 40px; text-align: center; box-shadow: 0 25px 50px rgba(0,0,0,0.3);">
+        <div style="font-size: 5rem; margin-bottom: 20px;">🛍️</div>
+        <h2 style="color: #0f172a; font-weight: 800; font-size: 2rem;">Your bag is empty</h2>
+        <p style="color: #64748b; margin-bottom: 40px; font-size: 1.1rem;">It looks like you haven't added any items yet.</p>
+        <a href="{% url 'home' %}" style="text-decoration: none; background: var(--primary); color: white; padding: 18px 50px; border-radius: 15px; font-weight: 800; display: inline-block;">Explore Collections</a>
+    </div>
+    {% endif %}
+</div>
+{% endblock %}

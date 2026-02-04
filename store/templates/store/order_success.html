@@ -1,0 +1,25 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div style="text-align: center; padding: 100px 20px;">
+    <div style="background: #dcfce7; width: 80px; height: 80px; border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 30px;">
+        <svg width="40" height="40" fill="none" stroke="#15803d" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M5 13l4 4L19 7"></path>
+        </svg>
+    </div>
+    
+    <h1 style="color: white; font-size: 2.5rem; font-weight: 800; margin-bottom: 15px;">Order Successfully Placed</h1>
+    <p style="color: rgba(255,255,255,0.8); font-size: 1.1rem; max-width: 500px; margin: 0 auto 40px;">
+        Your transaction has been processed successfully. A formal confirmation and receipt have been dispatched to your registered email address. Your shipment is estimated to arrive within 3-5 business days.
+    </p>
+    
+    <div style="display: flex; gap: 20px; justify-content: center;">
+        <a href="{% url 'home' %}" class="btn-add" style="display: inline-block; width: auto; padding: 15px 40px; text-decoration: none;">
+            Return to Store
+        </a>
+        <a href="{% url 'my_orders' %}" style="text-decoration: none; color: white; background: rgba(255,255,255,0.1); padding: 15px 40px; border-radius: 12px; font-weight: 600; border: 1px solid rgba(255,255,255,0.2);">
+            View Order Status
+        </a>
+    </div>
+</div>
+{% endblock %}

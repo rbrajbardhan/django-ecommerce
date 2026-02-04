@@ -1,0 +1,72 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div style="display: flex; gap: 50px;">
+    <aside style="width: 280px; flex-shrink: 0;">
+        <div style="background: white; padding: 30px; border-radius: 28px; box-shadow: 0 15px 35px rgba(0,0,0,0.15); position: sticky; top: 110px;">
+            <h3 style="margin-bottom: 25px; font-weight: 800; color: #0f172a; font-size: 1.3rem; border-bottom: 2px solid #f1f5f9; padding-bottom: 12px;">Categories</h3>
+            <ul style="list-style: none;">
+                <li style="margin-bottom: 15px;">
+                    <a href="{% url 'home' %}" 
+                       style="text-decoration: none; font-size: 1.1rem; transition: 0.2s;
+                       {% if not request.GET.category %} color: var(--primary); font-weight: 800; {% else %} color: #64748b; font-weight: 600; {% endif %}">
+                        All Collections
+                    </a>
+                </li>
+                
+                {% for cat in all_categories %}
+                    <li style="margin-bottom: 15px;">
+                        <a href="?category={{ cat.slug }}" 
+                           style="text-decoration: none; transition: 0.2s;
+                           {% if request.GET.category == cat.slug %} color: var(--primary); font-weight: 800; {% else %} color: #64748b; font-weight: 600; {% endif %}">
+                            {{ cat.name }}
+                        </a>
+                    </li>
+                {% endfor %}
+            </ul>
+        </div>
+    </aside>
+
+    <div style="flex-grow: 1;">
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 45px;">
+            <h1 style="color: white; font-size: 2.6rem; font-weight: 800; letter-spacing: -1px;">Explore Collections</h1>
+            <span style="color: white; font-weight: 700; background: var(--primary); padding: 10px 25px; border-radius: 50px; box-shadow: 0 5px 20px rgba(37, 99, 235, 0.3);">{{ products.count }} Products Available</span>
+        </div>
+        
+        <div class="product-grid">
+            {% for product in products %}
+            <div class="product-card">
+                <div style="height: 250px; background: #f8fafc; position: relative; overflow: hidden; display: flex; align-items: center; justify-content: center;">
+                    {% if product.image %}
+                        <img src="{{ product.image.url }}" alt="{{ product.name }}" style="width:100%; height:100%; object-fit:cover;">
+                    {% else %}
+                        <div style="text-align: center; color: #cbd5e1;">
+                            <svg width="60" height="60" fill="none" stroke="currentColor" viewBox="0 0 24 24" style="opacity: 0.4;"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z"></path></svg>
+                            <p style="margin-top: 10px; font-weight: 700; color: #94a3b8; font-size: 0.8rem;">NovaMarket Certified</p>
+                        </div>
+                    {% endif %}
+                </div>
+
+                <div class="card-body">
+                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
+                        <small style="color:var(--primary); font-weight: 800; text-transform: uppercase; letter-spacing: 1px;">{{ product.category.name }}</small>
+                        <a href="{% url 'product_detail' product.id %}" style="text-decoration: none; color: var(--primary); font-weight: 700; font-size: 0.85rem;">View Details</a>
+                    </div>
+                    
+                    <h3 style="margin: 5px 0 15px; font-weight: 800; color:#0f172a; font-size: 1.4rem; height: 3.4rem; overflow: hidden; line-height: 1.2;">{{ product.name }}</h3>
+                    
+                    <div class="price-tag">₹{{ product.price }}</div>
+                    
+                    <form action="{% url 'add_to_cart' product.id %}" method="post">
+                        {% csrf_token %}
+                        <button type="submit" class="btn-add">Add to Bag</button>
+                    </form>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+this is home

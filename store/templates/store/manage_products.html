@@ -1,0 +1,42 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div style="max-width: 1100px; margin: 0 auto; background: white; border-radius: 30px; padding: 40px; box-shadow: 0 25px 50px rgba(0,0,0,0.3);">
+    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 30px;">
+        <h2 style="font-weight: 800; color: #0f172a;">Product Inventory Control</h2>
+        
+        <div style="display: flex; gap: 20px; align-items: center;">
+            <a href="/admin/store/product/add/" target="_blank" style="text-decoration: none; color: white; background: var(--primary); padding: 10px 20px; border-radius: 12px; font-weight: 700; box-shadow: 0 4px 12px rgba(37, 99, 235, 0.2);">
+                + Add New Product
+            </a>
+            <a href="{% url 'admin_panel' %}" style="text-decoration: none; color: #64748b; font-weight: 700;">&larr; Return to Dashboard</a>
+        </div>
+    </div>
+    
+    <table style="width: 100%; border-collapse: collapse;">
+        <thead style="background: #f8fafc; text-align: left;">
+            <tr style="border-bottom: 2px solid #f1f5f9; color: #64748b; font-size: 0.85rem; text-transform: uppercase; letter-spacing: 1px;">
+                <th style="padding: 15px;">Item Specification</th>
+                <th style="padding: 15px;">Unit Price</th>
+                <th style="padding: 15px;">Inventory Status</th>
+                <th style="padding: 15px; text-align: right;">Management Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for prod in products %}
+            <tr style="border-bottom: 1px solid #f8fafc;">
+                <td style="padding: 15px; font-weight: 700; color: #1e293b;">{{ prod.name }}</td>
+                <td style="padding: 15px; font-weight: 800;">₹{{ prod.price }}</td>
+                <td style="padding: 15px;">
+                    <span style="{% if prod.stock < 10 %}color: #ef4444;{% else %}color: #15803d;{% endif %} font-weight: 800;">{{ prod.stock }} Units</span>
+                </td>
+                <td style="padding: 15px; text-align: right;">
+                    <a href="/admin/store/product/{{ prod.id }}/change/" target="_blank" style="color: var(--primary); text-decoration: none; font-weight: 700; margin-right: 15px;">Modify</a>
+                    <a href="{% url 'delete_product' prod.id %}" onclick="return confirm('Are you sure you want to permanently delete this product from the inventory?')" style="color: #ef4444; text-decoration: none; font-weight: 700;">Remove</a>
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% endblock %}

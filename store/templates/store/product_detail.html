@@ -1,0 +1,83 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="container" style="padding-top: 40px;">
+    <nav style="margin-bottom: 20px; font-size: 0.9rem; color: #64748b;">
+        <a href="{% url 'home' %}" style="color: var(--primary); text-decoration: none;">Collections</a> 
+        <span style="margin: 0 10px;">/</span>
+        <span style="color: #94a3b8;">{{ product.category.name }}</span>
+    </nav>
+
+    <div style="display: flex; gap: 60px; flex-wrap: wrap; align-items: flex-start;">
+        
+        <div style="flex: 1; min-width: 350px;">
+            <div style="background: white; border-radius: 20px; overflow: hidden; border: 1px solid var(--border); box-shadow: 0 10px 15px -3px rgba(0,0,0,0.05);">
+                {% if product.image %}
+                    <img src="{{ product.image.url }}" alt="{{ product.name }}" style="width: 100%; display: block;">
+                {% else %}
+                    <div style="height: 500px; background: #f1f5f9; display: flex; align-items: center; justify-content: center; color: #94a3b8; font-size: 1.2rem;">
+                        Image Currently Unavailable
+                    </div>
+                {% endif %}
+            </div>
+        </div>
+
+        <div style="flex: 1; min-width: 350px;">
+            <div style="margin-bottom: 30px;">
+                <span style="background: #eef2ff; color: var(--primary); padding: 6px 14px; border-radius: 99px; font-weight: 700; font-size: 0.85rem; text-transform: uppercase; letter-spacing: 1px;">
+                    {{ product.category.name }}
+                </span>
+                <h1 style="font-size: 2.5rem; font-weight: 800; color: var(--dark); margin: 15px 0 10px;">
+                    {{ product.name }}
+                </h1>
+                <p style="font-size: 2rem; font-weight: 800; color: var(--dark);">₹{{ product.price }}</p>
+            </div>
+
+            <div style="margin-bottom: 30px; line-height: 1.8; color: #475569;">
+                <h3 style="color: var(--dark); margin-bottom: 10px; font-weight: 700;">Product Description</h3>
+                <p>{{ product.description }}</p>
+            </div>
+
+            <div style="margin-bottom: 40px;">
+                {% if product.stock > 0 %}
+                    <div style="display: flex; align-items: center; gap: 8px; color: var(--success); font-weight: 700;">
+                        <span style="height: 10px; width: 10px; background: var(--success); border-radius: 50%;"></span>
+                        In Stock ({{ product.stock }} Units Available)
+                    </div>
+                {% else %}
+                    <div style="display: flex; align-items: center; gap: 8px; color: #ef4444; font-weight: 700;">
+                        <span style="height: 10px; width: 10px; background: #ef4444; border-radius: 50%;"></span>
+                        Currently Out of Stock
+                    </div>
+                {% endif %}
+            </div>
+
+            <div style="display: flex; gap: 15px;">
+                {% if product.stock > 0 %}
+                    <form action="{% url 'add_to_cart' product.id %}" method="post" style="flex: 1;">
+                        {% csrf_token %}
+                        <button type="submit" class="btn-buy" style="height: 60px; font-size: 1.1rem; font-weight: 700;">
+                            Add to Bag
+                        </button>
+                    </form>
+                {% else %}
+                    <button disabled style="flex: 1; height: 60px; background: #e2e8f0; color: #94a3b8; border: none; border-radius: 12px; font-weight: 700; cursor: not-allowed;">
+                        Out of Stock
+                    </button>
+                {% endif %}
+            </div>
+
+            <div style="margin-top: 40px; padding-top: 30px; border-top: 1px solid var(--border); display: grid; grid-template-columns: 1fr 1fr; gap: 20px;">
+                <div style="display: flex; align-items: center; gap: 10px; font-size: 0.85rem; color: #64748b; font-weight: 600;">
+                    <svg width="24" height="24" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M5 13l4 4L19 7" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path></svg>
+                    Complimentary Express Shipping
+                </div>
+                <div style="display: flex; align-items: center; gap: 10px; font-size: 0.85rem; color: #64748b; font-weight: 600;">
+                    <svg width="24" height="24" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M5 13l4 4L19 7" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path></svg>
+                    7-Day Return Guarantee
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

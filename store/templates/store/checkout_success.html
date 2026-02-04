@@ -1,0 +1,47 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div style="max-width: 800px; margin: 40px auto; text-align: center;">
+    <div style="background: white; border-radius: 35px; padding: 60px 40px; box-shadow: 0 25px 55px rgba(0,0,0,0.4); border: 1px solid rgba(255,255,255,0.2);">
+        
+        <div style="background: #dcfce7; width: 100px; height: 100px; border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 30px;">
+            <svg width="50" height="50" fill="none" stroke="#15803d" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M5 13l4 4L19 7"></path>
+            </svg>
+        </div>
+
+        <h1 style="color: #0f172a; font-weight: 800; font-size: 2.5rem; margin-bottom: 15px;">Order Successfully Placed</h1>
+        <p style="color: #64748b; font-size: 1.15rem; margin-bottom: 35px;">
+            Thank you for choosing **NovaMarket**. Your request has been confirmed and is currently being prepared for dispatch.
+        </p>
+
+        <div style="background: #f8fafc; border-radius: 20px; padding: 25px; margin-bottom: 40px; text-align: left; border: 1px solid #e2e8f0;">
+            <div style="display: flex; justify-content: space-between; margin-bottom: 15px;">
+                <span style="color: #64748b; font-weight: 600;">Transaction Reference:</span>
+                <span style="color: #0f172a; font-weight: 800;">#NM-ORD-{{ order.id }}</span>
+            </div>
+            <div style="display: flex; justify-content: space-between; margin-bottom: 15px;">
+                <span style="color: #64748b; font-weight: 600;">Total Amount:</span>
+                <span style="color: var(--primary); font-weight: 900; font-size: 1.2rem;">₹{{ order.total_price }}</span>
+            </div>
+            <div style="display: flex; justify-content: space-between;">
+                <span style="color: #64748b; font-weight: 600;">Current Status:</span>
+                <span style="color: #15803d; font-weight: 800; text-transform: uppercase; font-size: 0.85rem; letter-spacing: 1px;">Payment Confirmed</span>
+            </div>
+        </div>
+
+        <div style="display: flex; gap: 20px; justify-content: center;">
+            <a href="{% url 'home' %}" class="btn-add" style="text-decoration: none; width: auto; padding: 18px 40px; font-size: 1.1rem;">
+                Continue Shopping
+            </a>
+            <a href="{% url 'my_orders' %}" style="text-decoration: none; color: #0f172a; font-weight: 700; background: #e2e8f0; padding: 18px 40px; border-radius: 14px; transition: 0.3s;">
+                Order History
+            </a>
+        </div>
+    </div>
+
+    <p style="margin-top: 40px; color: rgba(255,255,255,0.7); font-size: 0.95rem;">
+        Logistics details will be issued from our **Corporate Headquarters** to your registered email address shortly.
+    </p>
+</div>
+{% endblock %}

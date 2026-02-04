@@ -1,0 +1,31 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div style="max-width: 1000px; margin: 0 auto; background: white; border-radius: 30px; padding: 40px; box-shadow: 0 20px 40px rgba(0,0,0,0.3);">
+    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 30px;">
+        <h2 style="font-weight: 800; color: #0f172a;">Account Directory</h2>
+        <a href="{% url 'admin_panel' %}" style="text-decoration: none; color: #64748b; font-weight: 700;">&larr; Return to Dashboard</a>
+    </div>
+
+    <table style="width: 100%; border-collapse: collapse; text-align: left;">
+        <tr style="border-bottom: 2px solid #f1f5f9; color: #64748b; font-size: 0.9rem; text-transform: uppercase; letter-spacing: 1px;">
+            <th style="padding: 15px;">User Identifier</th>
+            <th style="padding: 15px;">Email Address</th>
+            <th style="padding: 15px;">Access Level</th>
+        </tr>
+        {% for user in users %}
+        <tr style="border-bottom: 1px solid #f1f5f9;">
+            <td style="padding: 15px; font-weight: 700;">{{ user.username }}</td>
+            <td style="padding: 15px;">{{ user.email|default:"N/A" }}</td>
+            <td style="padding: 15px;">
+                {% if user.is_staff %}
+                    <span style="color: #2563eb; font-weight: 800;">Administrator</span>
+                {% else %}
+                    <span style="color: #64748b; font-weight: 600;">Standard User</span>
+                {% endif %}
+            </td>
+        </tr>
+        {% endfor %}
+    </table>
+</div>
+{% endblock %}
