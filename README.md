@@ -25,27 +25,27 @@ A full-featured e-commerce web application built with **Django**, featuring prod
 
 ---
 
-## 📁 Project Structure
+## 📂 Project Structure
 
+```text
 django-ecommerce/
-├── ecommerce_project/ # Django project settings
-├── store/ # Core e-commerce app (models, views, templates)
-├── static/ # CSS and static images
-├── media/ # Uploaded product images (gitignored)
-├── manage.py
+├── ecommerce_project/  # Django project settings
+├── store/              # Core e-commerce app (models, views, templates)
+├── static/             # CSS and static images
+├── media/              # Uploaded product images (gitignored)
+└── manage.py
 
 
 ---
 
-## How to run
+## 🚀 How to run
 
--- pip install django
--- python manage.py migrate
--- python manage.py runserver
-
+- pip install django
+- python manage.py migrate
+- python manage.py runserver
 
 
 🔐 Admin Access
 Create a superuser to access the admin panel:
 
--- python manage.py createsuperuser
+- python manage.py createsuperuser
