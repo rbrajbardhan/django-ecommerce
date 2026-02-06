@@ -18,3 +18,5 @@ env/
 
 # macOS
 .DS_Store
+
+seed.py
