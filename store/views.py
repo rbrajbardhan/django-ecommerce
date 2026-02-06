@@ -119,10 +119,13 @@ def my_orders(request):
 
 @user_passes_test(lambda u: u.is_staff, login_url='login')
 def admin_panel(request):
-    sales_trend = Order.objects.annotate(date=TruncDate('created_at')).values('date').annotate(total=Sum('total_amount')).order_by('date')
+    # Only calculate revenue from non-cancelled orders
+    sales_trend = Order.objects.exclude(status='Cancelled').annotate(date=TruncDate('created_at')).values('date').annotate(total=Sum('total_amount')).order_by('date')
+    
     context = {
         'total_orders': Order.objects.count(),
-        'total_revenue': Order.objects.aggregate(Sum('total_amount'))['total_amount__sum'] or 0,
+        # Exclude Cancelled orders from revenue card
+        'total_revenue': Order.objects.exclude(status='Cancelled').aggregate(Sum('total_amount'))['total_amount__sum'] or 0,
         'total_users': User.objects.count(),
         'total_products': Product.objects.count(),
         'recent_orders': Order.objects.all().order_by('-created_at')[:8],
@@ -136,7 +139,26 @@ def admin_panel(request):
 def update_order_status(request, order_id):
     if request.method == 'POST':
         order = get_object_or_404(Order, id=order_id)
-        order.status = request.POST.get('status')
+        new_status = request.POST.get('status')
+        
+        # If order is being cancelled, restore the stock
+        if new_status == 'Cancelled' and order.status != 'Cancelled':
+            with transaction.atomic():
+                for item in order.items.all():
+                    item.product.stock += item.quantity
+                    item.product.save()
+        
+        # If a previously cancelled order is restored, re-deduct stock
+        elif new_status != 'Cancelled' and order.status == 'Cancelled':
+            with transaction.atomic():
+                for item in order.items.all():
+                    if item.product.stock < item.quantity:
+                        messages.error(request, f"Cannot restore order. Insufficient stock for {item.product.name}.")
+                        return redirect('admin_panel')
+                    item.product.stock -= item.quantity
+                    item.product.save()
+
+        order.status = new_status
         order.save()
         messages.success(request, f"Order status updated for #{order_id}.")
     return redirect('admin_panel')
