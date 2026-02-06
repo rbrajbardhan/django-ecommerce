@@ -26,4 +26,5 @@ urlpatterns = [
     path('admin_panel/inventory/', views.manage_products, name='manage_products'),
     path('admin_panel/inventory/delete/<int:pk>/', views.delete_product, name='delete_product'),
     path('admin_panel/users/', views.manage_users, name='manage_users'),
+    path('contact/', views.contact_us, name='contact_us'),
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

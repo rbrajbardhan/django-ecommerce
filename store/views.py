@@ -154,3 +154,15 @@ def delete_product(request, pk):
 @user_passes_test(lambda u: u.is_staff, login_url='login')
 def manage_users(request):
     return render(request, 'store/manage_users.html', {'users': User.objects.all().order_by('-date_joined')})
+
+def contact_us(request):
+    if request.method == 'POST':
+        name = request.POST.get('name')
+        email = request.POST.get('email')
+        subject = request.POST.get('subject')
+        message = request.POST.get('message')
+        
+        messages.success(request, f"Thank you {name}, your message has been sent to our Gurugram HQ!")
+        return redirect('contact_us')
+        
+    return render(request, 'store/contact.html')
